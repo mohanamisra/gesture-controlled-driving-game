@@ -33,7 +33,7 @@ def get_keypoints(results):
 path = os.path.join('data')
 actions = np.array(['go', 'stop', 'left', 'right'])
 no_of_videos = 40
-video_frame_len = 40
+video_frame_len = 10
 
 # TEST VARS
 # actions = np.array(['go', 'stop'])
