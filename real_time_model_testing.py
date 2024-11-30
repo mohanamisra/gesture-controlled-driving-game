@@ -103,7 +103,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
             predicted_action = actions[np.argmax(res)]
             prediction_buffer.append(predicted_action)
 
-        if len(prediction_buffer) >= 10:
+        if len(prediction_buffer) >= 3:
             most_common_action, _ = Counter(prediction_buffer).most_common(1)[0]
             print(f"Predicted Action: {most_common_action}")
             prediction_buffer = []
