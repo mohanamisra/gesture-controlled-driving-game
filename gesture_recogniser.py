@@ -45,6 +45,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
         for video in range(no_of_videos):
             for frame_num in range(video_frame_len):
                 ret, frame = cap.read()
+                frame = cv.flip(frame, 1)
                 if not ret:
                     print("Exiting stream...")
                     break
