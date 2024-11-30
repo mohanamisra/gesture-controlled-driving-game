@@ -22,7 +22,7 @@ coin_image = pygame.image.load('./assets/coin.png')
 coin_image = pygame.transform.scale(coin_image, (60, 60))
 bg_image = pygame.transform.scale(bg_image, (WIDTH, HEIGHT))
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Gesture Control Game")
+pygame.display.set_caption("Gear Gesture 1.0")
 
 
 def display_game_over():
@@ -139,7 +139,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
         sequence = sequence[:10]
 
         img = cv.cvtColor(img, cv.COLOR_RGB2BGR)
-        cv.imshow('Gesture Control Game', img)
+        cv.imshow('Control Area', img)
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
 
