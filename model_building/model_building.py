@@ -10,12 +10,20 @@ from tensorflow.keras.layers import Dense, LSTM
 from tensorflow.keras.callbacks import TensorBoard, EarlyStopping
 from sklearn.metrics import accuracy_score
 
-path = os.path.join('data')
+path = os.path.join('../data')
 actions = np.array(['go', 'stop', 'left', 'right', 'offence'])
 no_of_videos = 20
 video_frame_len = 40
+
+
 label_map = {label: num for num, label in enumerate(actions)}
 
+# TEST FUNC (TO CHECK IF CORRECT LENGTH OF ARRAYS
+# for action in actions:
+#     for video in range(no_of_videos):
+#         for frame in range(video_frame_len):
+#             temp = np.load(os.path.join(path, action, str(video), f"{frame}.npy"))
+#             print(temp.shape)
 
 features, targets = [], []
 for action in actions:
@@ -32,12 +40,23 @@ y = to_categorical(targets).astype(int)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=True, stratify=y)
 
-log_dir = os.path.join('logs')
+log_dir = os.path.join('../logs')
 tb_callback = TensorBoard(log_dir=log_dir)
 
+model = Sequential()
+model.add(LSTM(32, input_shape=(40, 63), return_sequences=True, activation='relu'))
+model.add(LSTM(64, return_sequences=False, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(32, activation='relu'))
+model.add(Dense(actions.shape[0], activation='softmax'))
 
-model = tf.keras.models.load_model('gesture_recogniser.keras')
-y_pred = model.predict(X_test)
-ytrue = np.argmax(y_test, axis=1).tolist()
-y_pred = np.argmax(y_pred, axis=1).tolist()
-print(accuracy_score(ytrue, y_pred))
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
+model.fit(
+    X_train,
+    y_train,
+    epochs=350,
+    validation_split=0.25,
+    callbacks=[tb_callback]
+)
+
+model.save('gesture_recogniser.keras')

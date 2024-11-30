@@ -31,7 +31,7 @@ def get_keypoints(results):
     return np_sign
 
 
-path = os.path.join('data')
+path = os.path.join('../data')
 actions = np.array(['go', 'stop', 'left', 'right', 'offence'])
 no_of_videos = 20
 video_frame_len = 40
