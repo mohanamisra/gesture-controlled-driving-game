@@ -3,6 +3,22 @@ import numpy as np
 import cv2 as cv
 import mediapipe as mp
 
+sign = []
+
+def process_landmarks():
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            # hand_landmarks.landmark GIVES THE ITERABLE HAND LANDMARK OBJECT, WHERE THE LENGTH IS 21
+            # print(len(hand_landmarks.landmark))
+            for landmark in hand_landmarks.landmark:
+                sign.append(np.array([landmark.x, landmark.y, landmark.z]))
+
+def get_keypoints():
+    process_landmarks()
+    np_sign = np.array(sign).flatten()
+    print(np_sign.shape)
+
+
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
@@ -35,17 +51,8 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
 
-sign = []
 
-if results.multi_hand_landmarks:
-    for hand_landmarks in results.multi_hand_landmarks:
-        # hand_landmarks.landmark GIVES THE ITERABLE HAND LANDMARK OBJECT, WHERE THE LENGTH IS 21
-        # print(len(hand_landmarks.landmark))
-        for landmark in hand_landmarks.landmark:
-            sign.append(np.array([landmark.x, landmark.y, landmark.z]))
-
-sign = np.array(sign).flatten()
-print(sign.shape)
+get_keypoints()
 
 path = os.path.join('data')
 actions = np.array(['go', 'stop', 'left', 'right', 'offence'])
