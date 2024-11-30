@@ -28,7 +28,7 @@ rect = car_image.get_rect()
 rectangle_width, rectangle_height = 50, 30
 rect.x = WIDTH // 2 - rect.width // 2
 rect.y = HEIGHT - rect.height - 10
-rect_speed = 5
+rect_speed = 10
 rect_velocity_x = 0
 is_moving = False
 
@@ -65,6 +65,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
     while cap.isOpened():
         ret, frame = cap.read()
         frame = cv.flip(frame, 1)
+        frame = cv.resize(frame, (300, 300), interpolation=cv.INTER_AREA)
         if not ret:
             print("Exiting stream...")
             break
