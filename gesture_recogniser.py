@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import cv2 as cv
 import mediapipe as mp
@@ -45,6 +46,18 @@ if results.multi_hand_landmarks:
 
 sign = np.array(sign).flatten()
 print(sign.shape)
+
+path = os.path.join('data')
+actions = np.array(['go', 'stop', 'left', 'right', 'offence'])
+no_of_videos = 20
+video_frame_len = 40
+
+for action in actions:
+    for video in range(no_of_videos):
+        try:
+            os.makedirs(os.path.join(path, action, str(video)))
+        except:
+            pass
 
 cap.release()
 cv.destroyAllWindows()
