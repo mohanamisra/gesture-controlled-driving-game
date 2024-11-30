@@ -59,7 +59,6 @@ cap = cv.VideoCapture(0)
 sequence = []
 prediction_buffer = []
 
-# Ensure webcam is working
 if not cap.isOpened():
     print("We completely support your privacy requirements, but need to access your webcam for this app to work.")
     exit()
@@ -98,25 +97,27 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
             break
 
         if len(sequence) == 40:
-            # Get the prediction for this frame
             res = model.predict(np.expand_dims(sequence, axis=0), verbose=0)[0]
             predicted_action = actions[np.argmax(res)]
-            prediction_buffer.append(predicted_action)
+            # prediction_buffer.append(predicted_action)
 
-        if len(prediction_buffer) >= 3:
-            most_common_action, _ = Counter(prediction_buffer).most_common(1)[0]
-            print(f"Predicted Action: {most_common_action}")
-            prediction_buffer = []
+        # if len(prediction_buffer) >= 3:
+        #     most_common_action, _ = Counter(prediction_buffer).most_common(1)[0]
+        #     print(f"Predicted Action: {most_common_action}")
+        #     prediction_buffer = []
 
-            if most_common_action == 'go':
+            if predicted_action == 'go':
                 is_moving = True
-            elif most_common_action == 'stop':
+            elif predicted_action == 'stop':
                 is_moving = False
                 rect_velocity_x = 0
-            elif most_common_action == 'left':
+            elif predicted_action == 'left':
                 rect_velocity_x = -rect_speed
-            elif most_common_action == 'right':
+            elif predicted_action == 'right':
                 rect_velocity_x = rect_speed
+            else:
+                is_moving = False
+                rect_velocity_x = 0
 
         if is_moving:
             rect_y -= rect_speed
