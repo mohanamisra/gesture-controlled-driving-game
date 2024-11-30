@@ -1,6 +1,9 @@
 # Gear Gesture 1.0 - A Hand-Gesture Controlled Car Driving Game 🏁🚗🚙
 
-### So you think you can drive manual?
+### So you think you can drive manual?  
+   <img src="https://github.com/user-attachments/assets/61dbb349-bdb9-4f78-8081-b1badf75dcc7" width="500"/>
+   <img src="https://github.com/user-attachments/assets/aecc41fd-21af-43a0-b44c-5202de1b50c3" width="500" height="300"/>
+
 
 A hand-gesture-controlled top-down car game. Collect as many coins as possible within 60 seconds.
 
