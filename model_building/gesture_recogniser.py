@@ -30,7 +30,7 @@ def get_keypoints(results):
     np_sign = temp_arr.flatten()
     return np_sign
 
-path = os.path.join('data')
+path = os.path.join('../data')
 actions = np.array(['go', 'stop', 'left', 'right'])
 no_of_videos = 40
 video_frame_len = 10
@@ -124,7 +124,7 @@ y = to_categorical(targets).astype(int)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42, shuffle=True, stratify=y)
 
-log_dir = os.path.join('logs')
+log_dir = os.path.join('../logs')
 tb_callback = TensorBoard(log_dir=log_dir)
 
 # early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)

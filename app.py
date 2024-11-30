@@ -98,7 +98,10 @@ def get_keypoints(results):
 cap = cv.VideoCapture(0)
 
 sequence = []
-prediction_buffer = []
+pygame.mixer.music.load('./assets/bgmusic.mp3')
+coin_sound = pygame.mixer.Sound('./assets/coinmusic.mp3')
+
+pygame.mixer.music.play(loops=-1, start=0.0)
 
 if not cap.isOpened():
     print("We completely support your privacy requirements, but need to access your webcam for this app to work.")
@@ -174,6 +177,7 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
             if rect.colliderect(coin):
                 score += 10
                 coins.remove(coin)
+                coin_sound.play()
         screen.fill(BLACK)
 
         screen.blit(bg_image, (0, 0))
