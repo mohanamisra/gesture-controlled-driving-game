@@ -4,11 +4,20 @@
 
 A hand-gesture-controlled top-down car game. Collect as many coins as possible within 60 seconds.
 
-#### Controls:
-1. Open Palm for "GO"
-2. Closed Fist for "STOP"
-3. Thumb and Pointer out ("L-hand gesture") for "LEFT"
-4. Pointer and Middle fingers out ("V-hand gesture") for "RIGHT"
+#### Controls: 
+#### (Remember to use your right hand!)
+1. Open Palm for "GO"  
+   <img src="https://github.com/user-attachments/assets/958d30cd-3126-40a3-95f7-ce9116c76b84" width="200" />
+
+2. Closed Fist for "STOP"  
+   <img src="https://github.com/user-attachments/assets/de096287-4f89-4afb-8e3b-84634bc901c9" width="200" />
+
+3. Thumb and Pointer out ("L-hand gesture") for "LEFT"  
+   <img src="https://github.com/user-attachments/assets/51a50801-8d35-4463-aaba-f2cd95e90d93" width="200" />
+
+4. Pointer and Middle fingers out ("V-hand gesture") for "RIGHT"  
+   <img src="https://github.com/user-attachments/assets/747a70eb-a47e-4a13-9198-4af9a2edfd74" width="200" />
+
 
 #### Requirements:
 - OpenCV
