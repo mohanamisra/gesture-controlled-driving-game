@@ -3,38 +3,35 @@ import numpy as np
 import cv2 as cv
 import mediapipe as mp
 import tensorflow as tf
-from collections import Counter
 import pygame
 
-# Initialize Pygame
 pygame.init()
 
-# Pygame window setup
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1200, 800
+bg_image = pygame.image.load('./assets/background.png')
+car_image = pygame.image.load('./assets/car.png')
+car_image = pygame.transform.scale(car_image, (80, 140))
+bg_image = pygame.transform.scale(bg_image, (WIDTH, HEIGHT))
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gesture Control Game")
 
-# Colors
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 BLACK = (0, 0, 0)
 
-# Load the pre-trained model
 model = tf.keras.models.load_model('gesture_recogniser.keras')
 actions = np.array(['go', 'stop', 'left', 'right', 'offence'])
 
-# Initialize Pygame clock
 clock = pygame.time.Clock()
 
-# Define the rectangle
+rect = car_image.get_rect()
 rectangle_width, rectangle_height = 50, 30
-rect_x = WIDTH // 2 - rectangle_width // 2
-rect_y = HEIGHT - rectangle_height - 10
+rect.x = WIDTH // 2 - rect.width // 2
+rect.y = HEIGHT - rect.height - 10
 rect_speed = 5
-rect_velocity_x = 0  # Horizontal velocity
+rect_velocity_x = 0
 is_moving = False
 
-# Initialize mediapipe drawing and hands modules
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
@@ -48,12 +45,13 @@ def process_landmarks(results):
     else:
         return np.zeros(21 * 3)
 
+
 def get_keypoints(results):
     temp_arr = process_landmarks(results)
     np_sign = temp_arr.flatten()
     return np_sign
 
-# Initialize webcam capture
+
 cap = cv.VideoCapture(0)
 
 sequence = []
@@ -62,11 +60,6 @@ prediction_buffer = []
 if not cap.isOpened():
     print("We completely support your privacy requirements, but need to access your webcam for this app to work.")
     exit()
-
-def draw_dashed_line(x, y1, y2, dash_length=20):
-    """Draws a dashed line vertically from y1 to y2 at position x"""
-    for y in range(y1, y2, dash_length * 2):
-        pygame.draw.line(screen, WHITE, (x, y), (x, y + dash_length), 2)
 
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, max_num_hands=1) as hands:
     while cap.isOpened():
@@ -99,12 +92,6 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
         if len(sequence) == 40:
             res = model.predict(np.expand_dims(sequence, axis=0), verbose=0)[0]
             predicted_action = actions[np.argmax(res)]
-            # prediction_buffer.append(predicted_action)
-
-        # if len(prediction_buffer) >= 3:
-        #     most_common_action, _ = Counter(prediction_buffer).most_common(1)[0]
-        #     print(f"Predicted Action: {most_common_action}")
-        #     prediction_buffer = []
 
             if predicted_action == 'go':
                 is_moving = True
@@ -120,22 +107,22 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
                 rect_velocity_x = 0
 
         if is_moving:
-            rect_y -= rect_speed
-            if rect_y < -rectangle_height:
-                rect_y = HEIGHT
+            rect.y -= rect_speed
+            if rect.y < -rect.height:
+                rect.y = HEIGHT
 
-        rect_x += rect_velocity_x
+        rect.x += rect_velocity_x
 
-        if rect_x < 0:
-            rect_x = 0
-        elif rect_x + rectangle_width > WIDTH:
-            rect_x = WIDTH - rectangle_width
+        if rect.x < 0:
+            rect.x = 0
+        elif rect.x + rect.width > WIDTH:
+            rect.x = WIDTH - rect.width
 
         screen.fill(BLACK)
 
-        pygame.draw.rect(screen, RED, pygame.Rect(rect_x, rect_y, rectangle_width, rectangle_height))
-
-        pygame.display.flip()
+        screen.blit(bg_image, (0, 0))
+        screen.blit(car_image, (rect.x, rect.y))
+        pygame.display.update()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
