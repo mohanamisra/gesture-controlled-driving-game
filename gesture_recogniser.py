@@ -43,7 +43,7 @@ if not cap.isOpened():
 with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, max_num_hands=1) as hands:
     for action in actions:
         for video in range(no_of_videos):
-            for frame in range(video_frame_len):
+            for frame_num in range(video_frame_len):
                 ret, frame = cap.read()
                 if not ret:
                     print("Exiting stream...")
@@ -61,6 +61,14 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
                                                   mp_drawing.DrawingSpec(color=(0, 0, 200), thickness=2, circle_radius=2))
 
                 img = cv.cvtColor(img, cv.COLOR_RGB2BGR)
+
+                if frame_num == 0:
+                    cv.putText(img, "STARTING COLLECTION", (120, 200), cv.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 1, cv.LINE_AA)
+                    cv.putText(img, f"Collecting frames for {video} for action {action}", (15, 12), cv.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 1, cv.LINE_AA)
+                    cv.waitKey(2000)
+                else:
+                    cv.putText(img, f"Collecting frames for {video} for action {action}", (15, 12), cv.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 1, cv.LINE_AA)
+
                 cv.imshow('Webcam', img)
                 if cv.waitKey(1) & 0xFF == ord('q'):
                     break
