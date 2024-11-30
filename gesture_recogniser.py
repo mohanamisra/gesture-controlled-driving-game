@@ -16,7 +16,7 @@ def process_landmarks():
 def get_keypoints():
     process_landmarks()
     np_sign = np.array(sign).flatten()
-    print(np_sign.shape)
+    return np_sign
 
 path = os.path.join('data')
 actions = np.array(['go', 'stop', 'left', 'right', 'offence'])
@@ -69,7 +69,11 @@ with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5, m
                 else:
                     cv.putText(img, f"Collecting frames for {video} for action {action}", (15, 12), cv.FONT_HERSHEY_PLAIN, 1, (0, 255, 0), 1, cv.LINE_AA)
 
-                cv.imshow('Webcam', img)
+                frame_keypoints = get_keypoints()
+                keypoints_path = os.path.join(path, action, str(video), str(frame_num))
+                np.save(keypoints_path, frame_keypoints)
+
+                cv.imshow("Webcam", img)
                 if cv.waitKey(1) & 0xFF == ord('q'):
                     break
 
